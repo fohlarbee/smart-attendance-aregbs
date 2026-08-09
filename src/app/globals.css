@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/*
+  "Presence" design system — deep ink + indigo signal.
+  The app commits to a single dark identity: the projected QR is the hero and the
+  dark ground makes it read across a lecture hall. See SPEC.md / plan.
+*/
+@theme {
+  --color-ink: #0b0e1a; /* page ground (cooler, blue-tinted) */
+  --color-surface: #141926; /* cards, panels */
+  --color-surface-2: #1c2233; /* raised / hover */
+  --color-hairline: #2a3145; /* borders, dividers */
+
+  --color-primary: #be123c; /* wine / crimson accent */
+  --color-primary-soft: #e11d48;
+  --color-success: #3dd68c; /* present / marked */
+  --color-warn: #f2c94c; /* caution (e.g. weak GPS) */
+  --color-alert: #ff6b57; /* out of range / error */
+
+  --color-fg: #f4f6fb; /* high-emphasis text */
+  --color-muted: #94a0b8; /* secondary text */
+  --color-faint: #5c6780; /* tertiary / disabled */
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+:root {
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient glow used behind the beacon and key CTAs. */
+.glow-primary {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-primary) 30%, transparent),
+    0 0 40px -4px color-mix(in oklab, var(--color-primary) 45%, transparent);
+}
+
+/* Focus ring — visible, keyboard-first. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Landing beacon: an primary scan line sweeping across the code. */
+@keyframes scan-sweep {
+  0%,
+  100% {
+    transform: translateY(-46%);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(46%);
+    opacity: 1;
+  }
+}
+.scan-sweep {
+  animation: scan-sweep 3.2s ease-in-out infinite;
+}
+
+@keyframes beacon-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}
+.beacon-pulse {
+  animation: beacon-pulse 3.2s ease-in-out infinite;
+}
+
+/* Leaflet controls — smaller and themed to match the app. */
+.leaflet-control-layers,
+.leaflet-bar {
+  border: 1px solid var(--color-hairline) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+.leaflet-control-layers-toggle {
+  width: 30px !important;
+  height: 30px !important;
+  background-size: 16px 16px !important;
+}
+.leaflet-control-layers-expanded {
+  padding: 8px 10px !important;
+  font-size: 12px !important;
+  background: var(--color-surface) !important;
+  color: var(--color-fg) !important;
+}
+.leaflet-control-layers-expanded .leaflet-control-layers-separator {
+  border-color: var(--color-hairline) !important;
+}
+.leaflet-bar a {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  font-size: 15px !important;
+}
+
+/* Make the html5-qrcode camera preview fill its container instead of letterboxing. */
+#qr-reader {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: inherit;
+}
+/* Hide the library's own scan-region overlay/box. */
+#qr-reader__scan_region img,
+#qr-reader__dashboard {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
