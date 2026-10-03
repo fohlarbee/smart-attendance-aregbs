@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { DEFAULT_VENUES } from "../src/lib/venues";
 
 const prisma = new PrismaClient();
 
@@ -7,6 +8,15 @@ const PASSWORD = "password123"; // demo only
 
 async function main() {
   const passwordHash = await bcrypt.hash(PASSWORD, 10);
+
+  // Lecture halls. Coordinates stay null until a lecturer calibrates one in-app.
+  for (const [i, v] of DEFAULT_VENUES.entries()) {
+    await prisma.venue.upsert({
+      where: { slug: v.slug },
+      update: { name: v.name, sortOrder: i },
+      create: { slug: v.slug, name: v.name, sortOrder: i },
+    });
+  }
 
   const admin = await prisma.user.upsert({
     where: { email: "admin@presence.edu" },
@@ -84,6 +94,7 @@ async function main() {
       id: DEMO_SESSION_ID,
       courseId: course.id,
       label: "Week 5 lecture",
+      venue: "A1 lecture hall",
       startedAt,
       endedAt,
       centreLat: 9.05,
@@ -109,6 +120,7 @@ async function main() {
   }
 
   console.log("Seeded:");
+  console.log(`  venues   → ${DEFAULT_VENUES.map((v) => v.name).join(", ")} (uncalibrated)`);
   console.log(`  admin    → admin@presence.edu / ${PASSWORD}`);
   console.log(`  lecturer → lecturer@presence.edu / ${PASSWORD}`);
   console.log(`  student  → 2020ns0584@unijos.edu.ng / ${PASSWORD} (+ 4 more)`);

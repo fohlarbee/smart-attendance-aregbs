@@ -17,8 +17,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
-  const { courseId, centreLat, centreLng, centreAccuracy, radiusMetres, label, address } =
-    (body ?? {}) as Record<string, unknown>;
+  const {
+    courseId,
+    centreLat,
+    centreLng,
+    centreAccuracy,
+    radiusMetres,
+    label,
+    address,
+    venue,
+  } = (body ?? {}) as Record<string, unknown>;
 
   if (
     typeof courseId !== "string" ||
@@ -58,6 +66,8 @@ export async function POST(req: Request) {
           : null,
       radiusMetres: safeRadius,
       label: typeof label === "string" && label.trim() ? label.trim() : null,
+      venue:
+        typeof venue === "string" && venue.trim() ? venue.trim().slice(0, 120) : null,
     },
     select: { id: true },
   });
@@ -65,6 +75,7 @@ export async function POST(req: Request) {
   console.log(
     `[session:create] id=${session.id} course=${course.id} lecturer=${user.id} ` +
       `center=(${centreLat},${centreLng}) radius=${safeRadius}m` +
+      (typeof venue === "string" && venue ? ` venue="${venue}"` : "") +
       (typeof address === "string" && address ? ` address="${address}"` : ""),
   );
 

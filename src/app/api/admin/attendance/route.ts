@@ -22,6 +22,7 @@ export async function GET(req: Request) {
       session: {
         select: {
           label: true,
+          venue: true,
           startedAt: true,
           course: { select: { code: true, title: true } },
         },
@@ -35,6 +36,7 @@ export async function GET(req: Request) {
       "Course title",
       "Session date",
       "Session label",
+      "Venue",
       "Student",
       "Matric number",
       "Marked at",
@@ -46,6 +48,7 @@ export async function GET(req: Request) {
         r.session.course.title,
         r.session.startedAt.toISOString().slice(0, 10),
         r.session.label ?? "",
+        r.session.venue ?? "",
         r.student.fullName,
         r.student.matricNumber ?? "",
         r.markedAt.toISOString(),

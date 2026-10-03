@@ -47,10 +47,25 @@ model Enrolment {
   @@unique([courseId, studentId])
 }
 
+// A known teaching space (lecture hall, department block...). Coordinates start
+// out null and are calibrated once, in-app, by a lecturer standing in the room —
+// after that every session there is pinned exactly, with no GPS error to absorb.
+model Venue {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  lat          Float?
+  lng          Float?
+  radiusMetres Int?
+  sortOrder    Int      @default(0)
+  updatedAt    DateTime @updatedAt
+}
+
 model Session {
   id           String    @id @default(cuid())
   courseId     String
   label        String?
+  venue        String? // name of the Venue picked at creation, snapshotted
   startedAt    DateTime  @default(now())
   endedAt      DateTime?
   centreLat      Float

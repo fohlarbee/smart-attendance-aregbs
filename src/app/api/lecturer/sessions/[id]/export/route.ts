@@ -25,6 +25,7 @@ export async function GET(
     select: {
       id: true,
       label: true,
+      venue: true,
       startedAt: true,
       courseId: true,
       course: { select: { code: true, title: true } },
@@ -52,10 +53,11 @@ export async function GET(
         student: { select: { fullName: true, matricNumber: true } },
       },
     });
-    header = ["Student", "Matric number", "Marked at"];
+    header = ["Student", "Matric number", "Venue", "Marked at"];
     rows = marks.map((m) => [
       m.student.fullName,
       m.student.matricNumber ?? "",
+      session.venue ?? "",
       m.markedAt.toISOString(),
     ]);
     filename = `present-${session.course.code}-${date}.csv`;
@@ -83,13 +85,14 @@ export async function GET(
         (a.matricNumber ?? "").localeCompare(b.matricNumber ?? ""),
       );
 
-    header = ["Student", "Matric number", "Status", "Marked at"];
+    header = ["Student", "Matric number", "Status", "Venue", "Marked at"];
     rows = sorted.map((s) => {
       const at = markedAtByStudent.get(s.id);
       return [
         s.fullName,
         s.matricNumber ?? "",
         at ? "Present" : "Absent",
+        session.venue ?? "",
         at ? at.toISOString() : "",
       ];
     });

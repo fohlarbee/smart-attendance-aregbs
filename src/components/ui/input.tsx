@@ -17,6 +17,30 @@ export const Input = React.forwardRef<
 ));
 Input.displayName = "Input";
 
+export const Select = React.forwardRef<
+  HTMLSelectElement,
+  React.SelectHTMLAttributes<HTMLSelectElement>
+>(({ className, ...props }, ref) => (
+  <div className="relative">
+    <select
+      ref={ref}
+      className={cn(
+        "h-11 w-full appearance-none rounded-xl border border-hairline bg-ink pl-4 pr-10 text-sm text-fg",
+        "transition-colors focus:border-primary focus:outline-none",
+        className,
+      )}
+      {...props}
+    />
+    <span
+      aria-hidden
+      className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-muted"
+    >
+      ▾
+    </span>
+  </div>
+));
+Select.displayName = "Select";
+
 export function Label({
   className,
   ...props

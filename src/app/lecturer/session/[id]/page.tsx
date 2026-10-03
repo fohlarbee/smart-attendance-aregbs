@@ -16,6 +16,7 @@ export default async function SessionPage({
     select: {
       id: true,
       label: true,
+      venue: true,
       endedAt: true,
       radiusMetres: true,
       course: { select: { code: true, title: true } },
@@ -30,6 +31,7 @@ export default async function SessionPage({
       courseCode={session.course.code}
       courseTitle={session.course.title}
       label={session.label}
+      venue={session.venue}
       radiusMetres={session.radiusMetres}
     />
   );

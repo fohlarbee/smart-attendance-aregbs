@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { listVenues } from "@/lib/venues";
 import { CreateSessionForm } from "./create-session-form";
 
 export default async function NewSessionPage({
@@ -19,6 +20,8 @@ export default async function NewSessionPage({
   });
   if (!course) notFound();
 
+  const venues = await listVenues();
+
   return (
     <div className="mx-auto max-w-lg">
       <Link
@@ -31,6 +34,7 @@ export default async function NewSessionPage({
         courseId={course.id}
         courseCode={course.code}
         courseTitle={course.title}
+        venues={venues}
       />
     </div>
   );

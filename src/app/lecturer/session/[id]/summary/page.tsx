@@ -16,6 +16,7 @@ export default async function SessionSummary({
     select: {
       id: true,
       label: true,
+      venue: true,
       startedAt: true,
       endedAt: true,
       course: {
@@ -56,6 +57,7 @@ export default async function SessionSummary({
         </h1>
         <p className="mt-1 text-sm text-muted">
           {session.startedAt.toLocaleString()}
+          {session.venue ? ` · ${session.venue}` : ""}
         </p>
       </div>
 

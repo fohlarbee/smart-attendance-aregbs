@@ -27,6 +27,7 @@ export default async function AdminRecords({
         session: {
           select: {
             label: true,
+            venue: true,
             course: { select: { code: true, title: true } },
           },
         },
@@ -81,6 +82,7 @@ export default async function AdminRecords({
                 <th className="px-5 py-3 font-medium">Student</th>
                 <th className="px-5 py-3 font-medium">Matric no.</th>
                 <th className="px-5 py-3 font-medium">Course</th>
+                <th className="px-5 py-3 font-medium">Venue</th>
                 <th className="px-5 py-3 font-medium">Marked at</th>
               </tr>
             </thead>
@@ -95,6 +97,9 @@ export default async function AdminRecords({
                     <span className="font-mono text-xs text-primary">
                       {r.session.course.code}
                     </span>
+                  </td>
+                  <td className="px-5 py-3 text-muted">
+                    {r.session.venue ?? "—"}
                   </td>
                   <td className="px-5 py-3 text-muted">
                     {r.markedAt.toLocaleString()}

@@ -19,12 +19,14 @@ export function BeaconDisplay({
   courseCode,
   courseTitle,
   label,
+  venue,
   radiusMetres,
 }: {
   sessionId: string;
   courseCode: string;
   courseTitle: string;
   label: string | null;
+  venue: string | null;
   radiusMetres: number;
 }) {
   const router = useRouter();
@@ -104,6 +106,7 @@ export function BeaconDisplay({
           <h1 className="mt-1 font-display text-3xl font-semibold">
             {label ?? courseTitle}
           </h1>
+          {venue && <p className="mt-1 text-sm text-muted">{venue}</p>}
         </div>
 
         <div className="glow-primary rounded-[2rem] border border-hairline bg-surface p-6 sm:p-10">
@@ -118,7 +121,9 @@ export function BeaconDisplay({
 
         <p className="mt-6 text-center text-sm text-muted">
           Scan with the Presence app · code refreshes automatically ·{" "}
-          <span className="text-faint">must be within {radiusMetres} m</span>
+          <span className="text-faint">
+            must be within {radiusMetres} m{venue ? ` of ${venue}` : ""}
+          </span>
         </p>
         {error && <p className="mt-2 text-sm text-alert">{error}</p>}
       </div>
